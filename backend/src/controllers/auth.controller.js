@@ -64,15 +64,44 @@ export const signUp = async (req, res) => {
 
     //todo: send a welcome email to user
   } catch (error) {
-    console.log("Error in signup controller", error);
-    return res.status(500).json({ message: "Failed to create an account!" });
+    console.log("Error in signup controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error failed to create an account!" });
   }
 };
 
-export const login = (req, res) => {
-  res.send("Login endpoint");
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Invalid credentials!" });
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid)
+      return res.status(400).json({ message: "Invalid credentials!" });
+
+    generateToken(user._id, res);
+
+    return res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      password: user.password,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.error("Error in login controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error failed to login!" });
+  }
 };
 
-export const logout = (req, res) => {
-  res.send("Logout endpoint");
+export const logout = (_, res) => {
+  res
+    .clearCookie("jwt")
+    .status(200)
+    .json({ message: "Logged out successfully!" });
 };
