@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 
-import User from "../lib/models/User.js";
+import User from "../models/User.js";
 import { isValidEmail, isValidPassword } from "../utils/validators.js";
 import { generateToken } from "../utils/auth.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const checkEmail = async (req, res) => {
   const { email } = req.query;
 
   if (!isValidEmail(email)) {
-    return res.status(400).json({ message: "Invalid email format!" });
+    return res.status(400).json({ message: "Invalid email format" });
   }
 
   const user = await User.findOne({ email });
@@ -21,11 +22,11 @@ export const signUp = async (req, res) => {
 
   try {
     if (!fullName || !email || !password) {
-      return res.status(400).json({ message: "All fields are required!" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ message: "Invalid email format!" });
+      return res.status(400).json({ message: "Invalid email format" });
     }
 
     const user = await User.findOne({ email });
@@ -36,7 +37,7 @@ export const signUp = async (req, res) => {
     if (!isValidPassword(password)) {
       return res.status(400).json({
         message:
-          "Password must be 8-16 characters, include uppercase, lowercase, number, and special character!",
+          "Password must be 8-16 characters, include uppercase, lowercase, number, and special character",
       });
     }
 
@@ -49,7 +50,7 @@ export const signUp = async (req, res) => {
     });
 
     if (!newUser) {
-      return res.status(400).json({ message: "Invalid Credentials!" });
+      return res.status(400).json({ message: "Invalid Credentials" });
     }
 
     await newUser.save();
@@ -67,7 +68,7 @@ export const signUp = async (req, res) => {
     console.log("Error in signup controller:", error);
     return res
       .status(500)
-      .json({ message: "Internal server error failed to create an account!" });
+      .json({ message: "Internal server error failed to create an account" });
   }
 };
 
@@ -76,7 +77,7 @@ export const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials!" });
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid)
@@ -95,7 +96,7 @@ export const login = async (req, res) => {
     console.error("Error in login controller:", error);
     return res
       .status(500)
-      .json({ message: "Internal server error failed to login!" });
+      .json({ message: "Internal server error failed to login" });
   }
 };
 
@@ -104,4 +105,27 @@ export const logout = (_, res) => {
     .clearCookie("jwt")
     .status(200)
     .json({ message: "Logged out successfully!" });
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+    if (!profilePic)
+      return res.status(401).json({ message: "Profile pic is required" });
+
+    const userId = req.user._id;
+
+    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: uploadResponse.secure_url },
+      { new: true },
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log("Error in update profile:", error);
+    return res.status(500).json({ message: "Failed to update Profile" });
+  }
 };
