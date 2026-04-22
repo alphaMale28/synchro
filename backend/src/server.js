@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import cookieParser from "cookie-parser";
 
 import { ENV } from "./lib/env.js";
 import authRouters from "./routers/auth.router.js";
@@ -12,6 +13,7 @@ const __dirname = path.resolve();
 const PORT = ENV.PORT || 8000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRouters);
 app.use("/api/message", messageRouters);
