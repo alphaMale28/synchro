@@ -65,7 +65,7 @@ export const signUp = async (req, res) => {
 
     //todo: send a welcome email to user
   } catch (error) {
-    console.log("Error in signup controller:", error);
+    console.log("Error in signup controller:", error.message);
     return res
       .status(500)
       .json({ message: "Internal server error failed to create an account" });
@@ -93,7 +93,7 @@ export const login = async (req, res) => {
       profilePic: user.profilePic,
     });
   } catch (error) {
-    console.error("Error in login controller:", error);
+    console.error("Error in login controller:", error.message);
     return res
       .status(500)
       .json({ message: "Internal server error failed to login" });
@@ -125,7 +125,7 @@ export const updateProfile = async (req, res) => {
 
     return res.status(200).json(updatedUser);
   } catch (error) {
-    console.log("Error in update profile:", error);
+    console.log("Error in update profile:", error.message);
     return res.status(500).json({ message: "Failed to update Profile" });
   }
 };
