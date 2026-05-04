@@ -5,7 +5,7 @@ import { ENV } from "../lib/env.js";
 
 export const protectRoute = async (req, res, next) => {
   try {
-    const token = req.cookie.jwt;
+    const token = req.cookies.jwt;
     if (!token)
       return res
         .status(401)
@@ -19,6 +19,7 @@ export const protectRoute = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log("Error in protectRoute:", error``);
+    console.log("Error in protectRoute:", error.message);
+    return res.status(500).json({ message: "Failed to authenticate User." });
   }
 };
