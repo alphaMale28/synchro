@@ -27,7 +27,6 @@ function SignUpPage() {
 
   return (
     <div className="w-full flex items-center justify-center p-4 bg-slate-900">
-      {/* <div className="w-full flex items-center justify-center p-4 bg-[#2F313E]"> */}
       <div className="relative w-full max-w-6xl md:h-[800px] h-[650px]">
         <BorderAnimatedContainer>
           {/* <div className="w-full h-full flex flex-col md:flex-row items-stretch"> */}
@@ -54,6 +53,7 @@ function SignUpPage() {
 
                       <input
                         type="text"
+                        required
                         value={formData.fullName}
                         onChange={(e) =>
                           setFormData({ ...formData, fullName: e.target.value })
@@ -72,6 +72,7 @@ function SignUpPage() {
 
                       <input
                         type="email"
+                        required
                         value={formData.email}
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
@@ -90,6 +91,7 @@ function SignUpPage() {
 
                       <input
                         type="password"
+                        required
                         value={formData.password}
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
