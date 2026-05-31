@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import { useAuthStore } from "./store/useAuthStore";
 import PageLoader from "./components/PageLoader";
+import HomePage from "./pages/HomePage";
 
 const ProdectedRoute = ({ children, authUser }) => {
   return authUser ? children : <Navigate to={"/login"} />;
@@ -41,10 +42,12 @@ function App() {
             path="/"
             element={
               <ProdectedRoute authUser={authUser}>
-                <ChatPage />
+                <HomePage />
+                {/* <ChatPage /> */}
               </ProdectedRoute>
             }
           />
+
           <Route
             path="/login"
             element={
@@ -53,6 +56,7 @@ function App() {
               </PublicRoute>
             }
           />
+
           <Route
             path="/signup"
             element={
