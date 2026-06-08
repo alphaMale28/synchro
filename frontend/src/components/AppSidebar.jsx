@@ -49,9 +49,11 @@ function AppSidebar({ active, setActive }) {
   ];
   return (
     <Sidebar>
-      <SidebarHeader className={"flex items-center gap-2 mt-4"}>
+      <SidebarHeader
+        className={"flex items-center justify-center gap-2 mt-4 mb-10"}
+      >
         <BiLogoStripe />
-        <hr className="border-t border-[#8d8889]  w-10" />
+        {/* <hr className="border-t border-[#8d8889]  w-10" /> */}
       </SidebarHeader>
       <SidebarContent>
         <div className="flex flex-col items-center justify-between h-[750px]">
@@ -61,8 +63,13 @@ function AppSidebar({ active, setActive }) {
                 active === menu.id ? menu.activeIcon : menu.inactiveIcon;
               return (
                 <SidebarMenu key={menu.id}>
-                  <SidebarMenuButton onClick={() => setActive(menu.id)}>
-                    <Icon />
+                  <SidebarMenuButton
+                    isActive={active === menu.id}
+                    onClick={() => setActive(menu.id)}
+                  >
+                    <Icon
+                      className={`${active === menu.id ? "text-white" : "text-[#8d8889]"}`}
+                    />
                   </SidebarMenuButton>
                 </SidebarMenu>
               );
@@ -86,21 +93,27 @@ function AppSidebar({ active, setActive }) {
                 active === menu.id ? menu.activeIcon : menu.inactiveIcon;
 
               return (
-                <SidebarMenu>
-                  <SidebarMenuButton onClick={() => setActive(menu.id)}>
-                    <Icon />
+                <SidebarMenu key={menu.id}>
+                  <SidebarMenuButton
+                    isActive={active === menu.id}
+                    onClick={() => setActive(menu.id)}
+                  >
+                    <Icon
+                      className={`${active === menu.id ? "text-white" : "text-[#8d8889]"}`}
+                    />
                   </SidebarMenuButton>
                 </SidebarMenu>
               );
             })}
           </div>
-          <SidebarMenu>
+          <SidebarMenu className="flex items-center">
             <SidebarMenuButton
-              className="justify-center"
+              className="justify-center  size-11"
+              isActive={active === "profiles"}
               onClick={() => setActive("profiles")}
             >
               <div className="avatar">
-                <div className="w-8 rounded-full ">
+                <div className="rounded-full ">
                   <img src="https://img.daisyui.com/images/profile/demo/distracted2@192.webp" />
                 </div>
               </div>

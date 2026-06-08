@@ -17,6 +17,26 @@ const PublicRoute = ({ children, authUser }) => {
   return !authUser ? children : <Navigate to={"/"} />;
 };
 
+const lines = [
+  "-left-[450px] -top-[200px] w-[2350px] h-[1200px] border border-white/80",
+  "-left-[350px] -top-[150px] w-[2300px] h-[1800px] border border-white/20",
+  "-left-[400px] -top-[110px] w-[2180px] h-[1200px] border-1 border-white/40",
+  "-left-[350px] -top-[50px] w-[1050px] h-[1200px] border border-white/",
+  "-left-[300px] top-0 w-[1200px] h-[1200px] border border-white/50",
+  "-left-[250px] top-[50px] w-[100px] h-[1400px] border border-white/60",
+  "-left-[350px] -top-[190px] w-[1900px] h-[1600px] border-2 border-white/50",
+  "-right-[300px] -top-[250px] w-[2200px] h-[1200px] border-1 border-white/",
+  "-right-[350px] -top-[50px] w-[1050px] h-[1200px] border border-white/",
+  "-left-[300px] top-0 w-[1200px] h-[1200px] border border-white/50",
+  "-left-[400px] top-[150px] w-[1900px] h-[1900px]  border-white/60",
+  "-left-[350px] -top-[190px] w-[500px] h-[1800px] border-2 border-white/50",
+  "-right-[300px] -top-[250px] w-[2200px] h-[1200px] border-1 border-white/",
+  "-right-[550px] top-[250px] w-[2180px] h-[16000px] border border-white/50",
+  "-right-[180px] top-[350px] w-[2190px] h-[18000px] border-2 border-white/50",
+  "-right-[250px] top-[150px] w-[2145px] h-[1200px] border border-white/60",
+  "-right-[280px] top-[120px] w-[2240px] h-[1200px] border border-white/30",
+];
+
 function App() {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
 
@@ -26,13 +46,11 @@ function App() {
 
   console.log({ authUser });
 
-  // if (isCheckingAuth) return <PageLoader />;
   return (
-    <div className="min-h-screen bg-slate-900 text-white relative flex items-center justify-center p-4 overflow-hidden ">
-      {/* GRID BG & GLOW SHAPES */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#272757_1px,transparent_1px),linear-gradient(to_bottom,#272757_1px,transparent_1px)] bg-size-[14px_24px] opacity-20" />
-      <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#8686AC] opacity-20 blur-[120px]" />
-      <div className="absolute bottom-0 -right-32 h-[30rem] w-[30rem] rounded-full bg-[#505081] opacity-30 blur-[140px]" />
+    <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden bg-[#9799eb] text-[#8d8889]">
+      {lines.map((line, index) => (
+        <div key={index} className={`absolute rounded-full ${line} `} />
+      ))}
 
       {isCheckingAuth ? (
         <PageLoader />
@@ -43,7 +61,6 @@ function App() {
             element={
               <ProdectedRoute authUser={authUser}>
                 <HomePage />
-                {/* <ChatPage /> */}
               </ProdectedRoute>
             }
           />

@@ -13,13 +13,13 @@ function Home() {
 
   return (
     <div className="relative h-[910px]">
-      <div className="bg-[#202022]  rounded-2xl text-slate-400 flex">
+      <div className="bg-[#202022] rounded-2xl text-[#8d8889] flex">
         {/* Sidebar */}
         <SidebarProvider>
           <AppSidebar active={active} setActive={setActive} />
 
           {/* Content */}
-          <div className="flex-1 ">
+          <div className="flex-1 pt-4 pr-4">
             {active === "calls" && <Calls />}
             {active === "chats" && <Chats />}
             {active === "groups" && <Groups />}

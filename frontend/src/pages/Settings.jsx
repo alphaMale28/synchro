@@ -4,8 +4,8 @@ import { Group, Panel, Separator } from "react-resizable-panels";
 
 function Settings() {
   return (
-    <div className="relative w-[1800px] h-[910px]">
-      <div className="overflow-y-auto bg-[#f9fafc] rounded-2xl h-full">
+    <div className="relative w-[1800px] h-[880px]">
+      <div className="overflow-y-auto bg-[#e2e2e2] rounded-2xl h-full">
         <Group orientation="horizontal">
           {/* LEFT SIDE */}
 
@@ -27,7 +27,7 @@ function Settings() {
           {/* RIGHT SIDE */}
           <Panel>
             {/* <Panel defaultSize={80} minSize={60}> */}
-            <div className="h-full bg-base-200 p-4 overflow-auto rounded-r-2xl">
+            <div className="h-full bg-[#f9fafc] p-4 overflow-auto rounded-r-2xl">
               RightSide Settings Page
             </div>
           </Panel>
