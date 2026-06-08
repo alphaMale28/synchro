@@ -54,7 +54,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   /* Forces the autofilled text to match your slate color */
-  -webkit-text-fill-color: #94a3b8 !important; 
+  -webkit-text-fill-color: #8d8889 !important; 
 
   /* Overrides the browser's white background color with your dark theme color */
   box-shadow: 0 0 0px 1000px #1e293b inset !important; 
@@ -132,7 +132,7 @@ input:-webkit-autofill:active {
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent: oklch(0.623 0.008 17 / 0.3);;
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
@@ -177,7 +177,7 @@ input:-webkit-autofill:active {
     @apply border-border outline-ring/50;
     }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-[#8d8889] font-sans;
     }
   html {
     @apply font-sans;
