@@ -12,7 +12,7 @@ function Home() {
   const [active, setActive] = useState("chats");
 
   return (
-    <div className="relative h-[910px]">
+    <div className="relative h-[910px] w-full">
       <div className="bg-[#202022] rounded-2xl text-[#8d8889] flex">
         {/* Sidebar */}
         <SidebarProvider>

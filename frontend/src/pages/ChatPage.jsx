@@ -27,7 +27,7 @@ function ChatPage() {
   const { logout } = useAuthStore();
   return (
     // <div className="w-full flex items-center justify-center p-4 bg-slate-900">
-    <div className="relative w-full  h-[910px]">
+    <div className="relative w-full  h-[910px] mx-auto">
       <div className="bg-[#202022] h-full rounded-2xl text-slate-400 flex">
         <Group orientation="horizontal">
           {/* LEFT SIDE */}
