@@ -6,6 +6,7 @@ import cors from "cors";
 import { ENV } from "./lib/env.js";
 import authRouters from "./routers/auth.router.js";
 import messageRouters from "./routers/message.router.js";
+import conversationRouters from "./routers/conversation.router.js";
 import { connectDB } from "./lib/db.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRouters);
 app.use("/api/messages", messageRouters);
+app.use("/api/conversations", conversationRouters);
 
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

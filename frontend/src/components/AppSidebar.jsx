@@ -20,8 +20,11 @@ import {
 } from "react-icons/md";
 import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { BiLogoStripe } from "react-icons/bi";
+import { useAuthStore } from "@/store/useAuthStore";
 
 function AppSidebar({ active, setActive }) {
+  const { authUser } = useAuthStore();
+
   const topMenus = [
     {
       id: "chats",
@@ -114,7 +117,10 @@ function AppSidebar({ active, setActive }) {
             >
               <div className="avatar">
                 <div className="rounded-full ">
-                  <img src="https://img.daisyui.com/images/profile/demo/distracted2@192.webp" />
+                  <img
+                    // src="https://img.daisyui.com/images/profile/demo/distracted2@192.webp"
+                    src={authUser.profilePic || "/avatar.png"}
+                  />
                 </div>
               </div>
             </SidebarMenuButton>

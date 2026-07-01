@@ -1,31 +1,43 @@
 import mongoose from "mongoose";
 
+const { ObjectId } = mongoose.Schema.Types;
+
 const messageSchema = new mongoose.Schema(
   {
+    conversationId: {
+      type: ObjectId,
+      ref: "Conversation",
+      required: true,
+    },
+
     senderId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "User",
       required: true,
     },
-    receiverId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+
     text: {
       type: String,
       trim: true,
       maxlength: 2000,
     },
+
     image: {
       type: String,
+      default: "",
     },
+
+    readBy: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true },
 );
 
-messageSchema.index({ senderId: 1, receiverId: 1, createdAt: -1 });
-messageSchema.index({ receiverId: 1, senderId: 1, createdAt: -1 });
+messageSchema.index({ conversationId: 1, createdAt: -1 });
 
 messageSchema.pre("validate", function (next) {
   if (!this.text && !this.image) {

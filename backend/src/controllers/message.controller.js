@@ -1,62 +1,23 @@
 import cloudinary from "../lib/cloudinary.js";
+import Conversation from "../models/Conversation.js";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
-
-export const getAllContacts = async (req, res) => {
-  try {
-    const loggedInUserId = req.user._id;
-
-    const filteredUsers = await User.find({
-      _id: { $ne: loggedInUserId },
-    }).select("-password");
-
-    return res.status(200).json(filteredUsers);
-  } catch (error) {
-    console.log("Error in getAllContacts controller:", error.message);
-    return res.status(500).json({ message: "Failed to get contacts." });
-  }
-};
-
-export const getChatPartners = async (req, res) => {
-  try {
-    const loggedInUserId = req.user._id;
-
-    const messages = await Message.find({
-      $or: [{ senderId: loggedInUserId }, { receiverId: loggedInUserId }],
-    });
-
-    const chatPartnerIds = [
-      ...new Set(
-        messages.map((msg) =>
-          msg.senderId.toString() === loggedInUserId.toString()
-            ? msg.receiverId.toString()
-            : msg.senderId.toString(),
-        ),
-      ),
-    ];
-
-    const chatPartners = await User.find({
-      _id: { $in: chatPartnerIds },
-    }).select("-password");
-
-    return res.status(200).json(chatPartners);
-  } catch (error) {
-    console.log("Error in getChatPartner controller:", error.message);
-    return res.status(500).json({ message: "Failed to get chsrt partner." });
-  }
-};
 
 export const getMessagesByUserId = async (req, res) => {
   try {
     const myId = req.user._id;
     const { id: userToChatId } = req.params;
 
-    const messages = await Message.find({
-      $or: [
-        { senderId: myId, receiverId: userToChatId },
-        { senderId: userToChatId, receiverId: myId },
-      ],
+    const conversation = await Conversation.findOne({
+      participants: { $all: [myId, userToChatId] },
     });
+
+    if (!conversation)
+      return res.status(200).json("No conversation found of these 2 ids");
+
+    const messages = await Messages.find({
+      conversationId: conversation._id,
+    }).sort({ createdAt: 1 });
 
     return res.status(200).json(messages);
   } catch (error) {
@@ -68,20 +29,21 @@ export const getMessagesByUserId = async (req, res) => {
 export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
-    const { id: receiverId } = req.params;
-    const senderId = req.user._id;
+    const { id: userToChatId } = req.params;
+    const myId = req.user._id;
+    // const myId = "6a3fca5c531ab2037f1f2bdb";
 
     if (!text && !image) {
       return res.status(400).json({ message: "Text or image is required." });
     }
 
-    if (senderId.eduals(receiverId)) {
+    if (myId.equals(userToChatId)) {
       return res
         .status(400)
         .json({ message: "Cannot send message to yourself." });
     }
 
-    const receiverExists = await User.exists({ _id: receiverId });
+    const receiverExists = await User.exists({ _id: userToChatId });
     if (!receiverExists) {
       return res.status(404).json({ message: "Receiver not found" });
     }
@@ -93,14 +55,29 @@ export const sendMessage = async (req, res) => {
       imageUrl = uploadResponse.secure_url;
     }
 
+    let conversation = await Conversation.findOne({
+      participants: { $all: [myId, userToChatId] },
+    });
+
+    if (!conversation) {
+      conversation = await Conversation.create({
+        participants: [myId, userToChatId],
+      });
+    }
+
     const newMessage = new Message({
-      senderId,
-      receiverId,
+      senderId: myId,
+      conversationId: conversation._id,
       text,
       image: imageUrl,
     });
 
     await newMessage.save();
+
+    conversation.lastMessage = text || "📷 Image";
+    conversation.lastMessageAt = new Date();
+
+    await conversation.save();
 
     // TODO: socket.io
 
